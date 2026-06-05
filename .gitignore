@@ -1,0 +1,46 @@
+# ---------- Node / Vite (前端) ----------
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# 除錯與套件管理器日誌
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- Rust / Tauri (後端) ----------
+src-tauri/target/
+
+# Tauri 建置時自動產生的檔案(schema 等)
+src-tauri/gen/schemas/
+
+# 注意:Cargo.lock 為應用程式,刻意保留版控以鎖定相依版本
+
+# ---------- 編輯器 / 作業系統 ----------
+.vscode/*
+.claude
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+
+# ---------- 環境變數 / 機密 ----------
+.env
+.env.*
+!.env.example

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usage Tracker</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- 頂部標題列 (可拖曳移動視窗) -->
+    <header class="titlebar" data-tauri-drag-region>
+      <div class="brand">
+        <span class="dot"></span>
+        <span class="brand-name">USAGE&nbsp;TRACKER</span>
+      </div>
+      <div class="tabbar" id="tabbar"><!-- 服務分頁動態插入 --></div>
+      <div class="title-actions">
+        <button class="icon-btn" id="splitBtn" title="並排顯示全部 / 單一">▦</button>
+        <button class="icon-btn" id="dirBtn" title="切換 左右 / 上下">⬌</button>
+        <span class="sep"></span>
+        <button class="icon-btn" id="reloadBtn" title="立即重新整理">↻</button>
+        <button class="icon-btn" id="pauseBtn" title="暫停自動刷新">⏸</button>
+        <button class="icon-btn" id="pinBtn" title="視窗置頂">⇧</button>
+        <button class="icon-btn" id="settingsBtn" title="設定">⚙</button>
+        <span class="sep"></span>
+        <button class="icon-btn win" id="minBtn" title="最小化">─</button>
+        <button class="icon-btn win" id="closeBtn" title="關閉">✕</button>
+      </div>
+    </header>
+
+    <!-- 內嵌官方頁面的區域;實際的官方頁由 Rust 端建立的子 webview 蓋在這個區塊上 -->
+    <main class="stage" id="stage">
+      <div class="stage-empty" id="stageEmpty">
+        <p>尚未設定任何服務。</p>
+        <button class="ghost" id="emptySettingsBtn">前往設定</button>
+      </div>
+      <div class="refresh-bar" id="refreshBar">
+        <span id="countdownLabel"></span>
+      </div>
+    </main>
+
+    <!-- 設定面板 (覆蓋層) -->
+    <section class="settings-overlay hidden" id="settingsOverlay">
+      <div class="settings-panel">
+        <div class="settings-head">
+          <h1>設定</h1>
+          <button class="icon-btn" id="settingsCloseBtn">✕</button>
+        </div>
+
+        <div class="settings-body">
+          <!-- 服務清單 -->
+          <div class="block">
+            <div class="block-head">
+              <h2>服務 / 帳號</h2>
+              <button class="ghost small" id="addServiceBtn">+ 新增</button>
+            </div>
+            <p class="hint">
+              每個服務使用獨立的瀏覽資料分身 (profile),登入狀態互不干擾。
+              第一次切換到某服務時,請在內嵌頁面中正常登入一次即可。
+            </p>
+            <ul class="service-list" id="serviceList"></ul>
+          </div>
+
+          <!-- 行為設定 -->
+          <div class="block">
+            <div class="block-head"><h2>行為</h2></div>
+
+            <label class="row">
+              <span>自動重新整理間隔</span>
+              <select id="intervalSelect">
+                <option value="0">關閉</option>
+                <option value="30">30 秒</option>
+                <option value="60">60 秒</option>
+                <option value="120">2 分鐘</option>
+                <option value="300">5 分鐘</option>
+              </select>
+            </label>
+            <p class="hint">
+              這是「重新載入整個官方頁面」的間隔。官方進度數字並不會每幾秒就變,
+              且過於頻繁的重載會造成畫面閃爍,因此不提供 10 秒選項;60 秒是平衡點。
+            </p>
+
+            <label class="row toggle-row">
+              <span>視窗永遠置頂</span>
+              <input type="checkbox" id="alwaysOnTop" />
+            </label>
+
+            <label class="row toggle-row">
+              <span>開機時自動啟動</span>
+              <input type="checkbox" id="autostart" />
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-foot">
+          <span class="version">v1.0.0</span>
+          <button class="primary" id="saveBtn">儲存並套用</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 服務編輯小視窗 -->
+    <section class="modal hidden" id="serviceModal">
+      <div class="modal-card">
+        <h2 id="modalTitle">新增服務</h2>
+        <label class="field">
+          <span>名稱</span>
+          <input type="text" id="svcName" placeholder="例如 Claude" />
+        </label>
+        <label class="field">
+          <span>網址 (官方 usage / 設定頁)</span>
+          <input type="text" id="svcUrl" placeholder="https://claude.ai/settings/usage" />
+        </label>
+        <label class="field">
+          <span>分身 ID (profile,英數字,留空自動產生)</span>
+          <input type="text" id="svcProfile" placeholder="claude" />
+        </label>
+        <p class="hint">
+          ⚠ 官方頁面網址可能隨時間改變。若進度頁打不開,請在瀏覽器找到正確網址後貼上。
+        </p>
+        <div class="modal-actions">
+          <button class="ghost" id="svcCancel">取消</button>
+          <button class="primary" id="svcSave">確定</button>
+        </div>
+      </div>
+    </section>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
