@@ -1,6 +1,6 @@
 [package]
 name = "usage-tracker"
-version = "1.0.0"
+version = "1.0.1"
 description = "Embeds Claude & Gemini official usage pages with always-on-top + autostart."
 authors = ["you"]
 edition = "2021"

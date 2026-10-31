@@ -1,6 +1,6 @@
 {
   "name": "usage-tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Desktop tracker that embeds Claude & Gemini official usage pages.",
   "type": "module",
   "scripts": {
